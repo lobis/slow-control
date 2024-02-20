@@ -18,6 +18,7 @@ dependencies = [
     "fastapi",
     "uvicorn",
     "pyserial",
+    "pyvsr53dl @ git+https://github.com/lobis/pyvsr53dl.git",
 ]
 dynamic = [
     "version"
@@ -28,6 +29,9 @@ source = "vcs"
 
 [tool.hatch.build.hooks.vcs]
 version-file = "src/slow_control/_version.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.pytest.ini_options]
 addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
