@@ -1,4 +1,4 @@
-import asyncio
+from __future__ import annotations
 
 from slow_control import SlowControl
 
@@ -21,6 +21,7 @@ def test_slow_control():
             state["counter"] += 1
             print("counter", state["counter"])
             import time
+
             time.sleep(1)
 
     slow_control.run()

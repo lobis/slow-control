@@ -1,6 +1,8 @@
-from fastapi import FastAPI
-import asyncio
+from __future__ import annotations
+
 import concurrent.futures
+
+from fastapi import FastAPI
 
 
 class SlowControl:
@@ -20,6 +22,7 @@ class SlowControl:
         # run task in the thread pool, start it immediately
         self.executor.submit(func)
 
-    def run(self, host='localhost', port=8000):
+    def run(self, host="localhost", port=8000):
         import uvicorn
+
         uvicorn.run(self.app, host=host, port=port)
