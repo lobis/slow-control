@@ -1,0 +1,9 @@
+[devices.temperature_1]
+type = "temperature"
+port = "COM3"
+baudrate = 115200
+
+[devices.temperature_2]
+type = "temperature"
+port = "COM4"
+baudrate = 115200
