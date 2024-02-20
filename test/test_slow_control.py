@@ -16,12 +16,12 @@ def test_slow_control():
         return state
 
     @slow_control.background_task
-    def background_task():
-        while True:
-            state["counter"] += 1
-            print("counter", state["counter"])
-            import time
+    def background_task(n=10):
+        state["counter"] += n
+        print("counter", state["counter"])
 
-            time.sleep(1)
+    @slow_control.periodic_task(interval_seconds=1)
+    def periodic_task():
+        print("periodic_task")
 
     slow_control.run()
