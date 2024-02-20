@@ -15,11 +15,6 @@ def test_slow_control():
     async def root():
         return state
 
-    @slow_control.background_task
-    def background_task(n=10):
-        state["counter"] += n
-        print("counter", state["counter"])
-
     @slow_control.periodic_task(interval_seconds=1)
     def periodic_task():
         print("periodic_task")

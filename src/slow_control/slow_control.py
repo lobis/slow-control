@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import concurrent.futures
-import time
+import asyncio
+import threading
 
 import uvicorn
 from fastapi import FastAPI
@@ -10,7 +10,6 @@ from fastapi import FastAPI
 class SlowControl:
     def __init__(self):
         self.app = FastAPI()
-        self.executor = None
         self.background_tasks = []
         self._exit = False
 
@@ -21,30 +20,29 @@ class SlowControl:
 
         return decorator
 
-    def background_task(self, func):
-        self.background_tasks.append(func)
-
     # TODO: do not block
     def periodic_task(self, interval_seconds):
-        # run a sync function every interval_seconds, exit if _exit is True
         def decorator(func):
-            def wrapper():
+            async def async_wrapper():
                 while not self._exit:
-                    func()
-                    time.sleep(interval_seconds)
+                    asyncio.get_running_loop().run_in_executor(None, func)
+                    await asyncio.sleep(interval_seconds)
 
-            self.background_tasks.append(wrapper)
-            return wrapper
+            self.background_tasks.append(async_wrapper)
+            return func
 
         return decorator
 
     def run(self, host="localhost", port=8000):
-        self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
         self._exit = False
 
-        for task in self.background_tasks:
-            self.executor.submit(task)
+        async def run_all():
+            tasks = [func() for func in self.background_tasks]
+            await asyncio.gather(*tasks)
 
+        thread = threading.Thread(target=asyncio.run, args=(run_all(),))
+        thread.start()
         uvicorn.run(self.app, host=host, port=port)
+
         self._exit = True
-        self.executor.shutdown()
+        thread.join()
