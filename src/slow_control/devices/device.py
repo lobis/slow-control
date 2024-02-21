@@ -1,0 +1,51 @@
+from __future__ import annotations
+
+import threading
+from abc import abstractmethod
+
+
+class Device:
+    def __init__(self):
+        self._lock = threading.Lock()
+        self._open: bool = False
+        self._handler = None
+
+    @abstractmethod
+    def open(self):
+        pass
+
+    @abstractmethod
+    def close(self):
+        pass
+
+    @property
+    def is_open(self):
+        return self._open
+
+    @property
+    def handler(self):
+        return self._handler
+
+    def get(self):
+        if not self.is_open:
+            self.open()
+
+        return self._handler
+
+    def acquire(self):
+        self._lock.acquire()
+        if not self.is_open:
+            self.open()
+
+    def release(self):
+        if self.is_open:
+            self.close()
+        self._lock.release()
+
+    def __enter__(self):
+        self.acquire()
+        return self.get()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.release()
+        return False

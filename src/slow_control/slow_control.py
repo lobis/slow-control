@@ -6,12 +6,30 @@ import threading
 import uvicorn
 from fastapi import FastAPI
 
+from slow_control.devices.device import Device
+from slow_control.measure.sensor import Sensor
+
 
 class SlowControl:
     def __init__(self):
+        self._sensors = dict()
+        self._devices = dict()
+
         self.app = FastAPI()
         self.background_tasks = []
         self._exit = False
+
+    def add_device(self, name: str, device: Device):
+        self._devices[name] = device
+
+    def add_sensor(self, name: str, sensor: Sensor):
+        self._sensors[name] = sensor
+
+    def get_device(self, name: str) -> Device:
+        return self._devices[name]
+
+    def get_sensor(self, name: str) -> Sensor:
+        return self._sensors[name]
 
     def route(self, path):
         def decorator(func):
