@@ -5,8 +5,8 @@ from slow_control.measure.sensor_types import PressureSensor
 
 
 class VSR53Sensor(PressureSensor):
-    def __init__(self, device: VSR53Device):
-        super().__init__(device)
+    def __init__(self, name: str, device: VSR53Device):
+        super().__init__(name=name, device=device)
 
     def _update_measurement(self):
         with self._device as gauge:  # type: VSR53USB

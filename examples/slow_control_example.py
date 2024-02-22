@@ -7,12 +7,12 @@ from slow_control.measure.vsr53 import VSR53Sensor
 
 slow_control = SlowControl()
 
-pressure_gauge = VSR53Device("COM5")
+pressure_gauge = VSR53Device(name="pressure_pipe", port="COM5")
 
-slow_control.add_device("vsr53", pressure_gauge)
+slow_control.add_device(pressure_gauge)
 
-slow_control.add_sensor("pressure_one", VSR53Sensor(pressure_gauge))
-slow_control.add_sensor("pressure_two", VSR53Sensor(pressure_gauge))
+slow_control.add_sensor(VSR53Sensor(name="pressure_one", device=pressure_gauge))
+slow_control.add_sensor(VSR53Sensor(name="pressure_two", device=pressure_gauge))
 
 database = Database(
     dbname="postgres",
@@ -44,14 +44,13 @@ async def sensors():
     return sensors_with_data
 
 
-@slow_control.periodic_task(interval_seconds=1)
+@slow_control.periodic_task(interval_seconds=5)
 def periodic_task():
-    for sensor_name, sensor in slow_control._sensors.items():
+    for sensor_name, sensor in slow_control.sensors.items():
         sensor.update()
         print(f"{sensor_name}: {sensor}")
-        # database.execute_query
-        print(sensor.get_table_creation_sql())
-        # database.execute_query(sensor.get_insert_sql())
+        database.execute_query(sensor.get_table_creation_sql())
+        database.execute_query(sensor.get_insert_sql())
 
 
 slow_control.run()

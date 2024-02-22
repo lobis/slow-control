@@ -6,8 +6,8 @@ from slow_control.devices.device import Device
 
 
 class VSR53Device(Device):
-    def __init__(self, port: str):
-        super().__init__()
+    def __init__(self, *, name: str, port: str):
+        super().__init__(name=name)
         self._handler = VSR53USB(port)
 
     def open(self):

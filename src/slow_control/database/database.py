@@ -34,10 +34,8 @@ class Database:
         try:
             self.cursor.execute(query)
             self.connection.commit()
-            return self.cursor.fetchall()
         except Error as e:
             print(f"Error executing query: {e}")
-            return None
 
     def close_connection(self):
         if self.connection:

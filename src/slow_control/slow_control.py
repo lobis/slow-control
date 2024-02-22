@@ -19,11 +19,15 @@ class SlowControl:
         self.background_tasks = []
         self._exit = False
 
-    def add_device(self, name: str, device: Device):
-        self._devices[name] = device
+    def add_device(self, device: Device):
+        if device.name in self._devices:
+            raise ValueError(f"Device with name {device.name} already exists")
+        self._devices[device.name] = device
 
-    def add_sensor(self, name: str, sensor: Sensor):
-        self._sensors[name] = sensor
+    def add_sensor(self, sensor: Sensor):
+        if sensor.name in self._sensors:
+            raise ValueError(f"Sensor with name {sensor.name} already exists")
+        self._sensors[sensor.name] = sensor
 
     def get_device(self, name: str) -> Device:
         return self._devices[name]
@@ -64,3 +68,11 @@ class SlowControl:
 
         self._exit = True
         thread.join()
+
+    @property
+    def sensors(self):
+        return self._sensors
+
+    @property
+    def devices(self):
+        return self._devices
