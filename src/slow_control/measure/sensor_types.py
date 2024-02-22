@@ -12,4 +12,13 @@ class PressureSensor(Sensor, ABC):
         self._measurement_value: float = 0.0
 
     def get_insert_sql(self):
-        return f"INSERT INTO {self._sensor_type} (time, value) VALUES ({self.measurement_time}, {self.measurement_value})"
+        return f"INSERT INTO {self._sensor_type} (time, value) VALUES ({self.measurement_time}, {self.measurement_value});"
+
+    def _get_table_creation_sql(self):
+        return """CREATE TABLE IF NOT EXISTS pressure_sensor (
+    sensor_id INT,
+    time TIMESTAMPTZ,
+    value FLOAT,
+    PRIMARY KEY (sensor_id, time),
+    FOREIGN KEY (sensor_id) REFERENCES sensors(id) ON DELETE CASCADE
+);"""

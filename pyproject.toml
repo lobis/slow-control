@@ -18,6 +18,7 @@ dependencies = [
     "fastapi",
     "uvicorn",
     "pyserial",
+    "psycopg2",
     "vsr53",
 ]
 dynamic = [

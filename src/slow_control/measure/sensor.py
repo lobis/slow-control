@@ -37,6 +37,18 @@ class Sensor(ABC):
     def get_insert_sql(self) -> str:
         pass
 
+    @abstractmethod
+    def _get_table_creation_sql(self) -> str:
+        pass
+
+    def get_table_creation_sql(self) -> str:
+        return f"""{self._get_table_creation_sql_base()}
+{self._get_table_creation_sql()}"""
+
+    def _get_table_creation_sql_base(self) -> str:
+        return """CREATE TABLE IF NOT EXISTS devices (id SERIAL PRIMARY KEY);
+CREATE TABLE IF NOT EXISTS sensors (id SERIAL PRIMARY KEY, device_id INT, FOREIGN KEY (device_id) REFERENCES devices(id) ON DELETE CASCADE);"""
+
     @property
     def measurement_value(self):
         return self._measurement_value

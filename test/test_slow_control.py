@@ -39,5 +39,7 @@ def test_slow_control():
         for sensor_name, sensor in slow_control._sensors.items():
             sensor.update()
             print(f"{sensor_name}: {sensor}")
+            print(sensor.get_table_creation_sql())
+            print(sensor.get_insert_sql())
 
     slow_control.run()
