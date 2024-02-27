@@ -19,6 +19,7 @@ dependencies = [
     "uvicorn",
     "pyserial",
     "psycopg2",
+    "hvps",
     "vsr53",
 ]
 dynamic = [

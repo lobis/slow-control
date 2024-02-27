@@ -36,9 +36,19 @@ class Sensor(ABC):
         self._device.release()
         return False
 
-    def update(self) -> None:
-        self._update_measurement()
-        self._update_time()
+    def update(self) -> bool:
+        try:
+            self._device.acquire()
+            print(f"Updating {self.name}")
+            self._update_measurement()
+            self._update_time()
+            return True
+
+        except Exception:
+            return False
+
+        finally:
+            self._device.release()
 
     def __repr__(self):
         return f"{self.measurement_time_formatted} - {self.measurement_value}"

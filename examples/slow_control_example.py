@@ -22,8 +22,6 @@ database = Database(
     port=5432,
 )
 
-database.connect()
-
 
 @slow_control.route("/")
 async def root():
@@ -44,7 +42,7 @@ async def sensors():
     return sensors_with_data
 
 
-@slow_control.periodic_task(interval_seconds=5)
+@slow_control.periodic_task(interval_seconds=1)
 def periodic_task():
     for sensor_name, sensor in slow_control.sensors.items():
         sensor.update()
@@ -53,7 +51,5 @@ def periodic_task():
         database.execute_query(sensor.get_insert_sql())
 
 
-slow_control.run()
-
 if __name__ == "__main__":
-    ...
+    slow_control.run()

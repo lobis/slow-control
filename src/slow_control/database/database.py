@@ -26,16 +26,18 @@ class Database:
         )
         self.cursor = self.connection.cursor()
 
-    def execute_query(self, query):
-        # reconnect if connection is closed
-        if not self.connection:
-            self.connect()
-
+    def execute_query(self, query) -> bool:
         try:
+            if not self.connection:
+                self.connect()
+
             self.cursor.execute(query)
             self.connection.commit()
+            return True
+
         except Error as e:
             print(f"Error executing query: {e}")
+            return False
 
     def close_connection(self):
         if self.connection:
