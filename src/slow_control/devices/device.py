@@ -51,7 +51,8 @@ class Device:
     def release(self):
         if self.is_open:
             self.close()
-        self._lock.release()
+        if self._lock.locked():
+            self._lock.release()
 
     def __enter__(self):
         self.acquire()

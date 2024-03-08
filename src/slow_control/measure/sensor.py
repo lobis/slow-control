@@ -38,13 +38,12 @@ class Sensor(ABC):
 
     def update(self) -> bool:
         try:
-            self._device.acquire()
-            print(f"Updating {self.name}")
             self._update_measurement()
             self._update_time()
             return True
 
-        except Exception:
+        except Exception as e:
+            print(f"Failed to update {self.name}: {e}")
             return False
 
         finally:
