@@ -51,6 +51,9 @@ class Sensor(ABC):
 
     def __repr__(self):
         return f"{self.measurement_time_formatted} - {self.measurement_value}"
+    
+    def get_measurement_value(self):
+        return self._measurement_value
 
     @abstractmethod
     def _update_measurement(self) -> None:
