@@ -70,7 +70,7 @@ def periodic_task():
         average_pressure = sum(last_5_pressures[sensor_name]) / len(last_5_pressures[sensor_name])
 
         # If the latest value is more than 5% higher than the average, print a warning
-        if current_pressure > average_pressure * 1.0001:
+        if current_pressure > average_pressure * 1.05:
             print(f"Warning: Pressure from {sensor_name} is more than 5% higher than the average of the last 5 values.")
 
 if __name__ == "__main__":
