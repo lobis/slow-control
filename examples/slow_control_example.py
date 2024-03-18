@@ -18,7 +18,6 @@ slow_control.add_device(vsr53_device)
 
 slow_control.add_sensor(VSR53PressureSensor(name="pressure_one", device=vsr53_device))
 
-
 database = Database(
     dbname="slow-control",
     user="admin",
@@ -70,8 +69,8 @@ def periodic_task():
         average_pressure = sum(last_5_pressures[sensor_name]) / len(last_5_pressures[sensor_name])
 
         # If the latest value is more than 5% higher than the average, print a warning
-        if current_pressure > average_pressure * 1.05:
-            print(f"Warning: Pressure from {sensor_name} is more than 5% higher than the average of the last 5 values.")
+        if current_pressure > average_pressure * 1.001:
+            print(f"Warning: Pressure from {sensor_name} is more than 0.1% higher than the average of the last 5 values.")
 
 if __name__ == "__main__":
     slow_control.run()
