@@ -2,18 +2,20 @@ from __future__ import annotations
 
 from slow_control import SlowControl
 from slow_control.database.database import Database
-
-from slow_control.devices.vsr53 import VSR53Device
 from slow_control.devices.bronkhorst import BronkhorstDevice
-
+from slow_control.devices.vsr53 import VSR53Device
+from slow_control.measure.bronkhorst import (
+    BronkhorstPressureSensor,
+    BronkhorstPressureSetpointSensor,
+)
 from slow_control.measure.vsr53 import VSR53PressureSensor
-from slow_control.measure.bronkhorst import BronkhorstPressureSensor
-from slow_control.measure.bronkhorst import BronkhorstPressureSetpointSensor
 
 slow_control = SlowControl()
 
 vsr53_device = VSR53Device(name="pressure_pipe", port="COM5")
-bronkhorst_device = BronkhorstDevice(name="other_pressure", port="/dev/cu.usbserial-1110")
+bronkhorst_device = BronkhorstDevice(
+    name="other_pressure", port="/dev/cu.usbserial-1110"
+)
 
 slow_control.add_device(vsr53_device)
 slow_control.add_device(bronkhorst_device)
@@ -21,8 +23,14 @@ slow_control.add_device(bronkhorst_device)
 slow_control.add_sensor(VSR53PressureSensor(name="pressure_one", device=vsr53_device))
 slow_control.add_sensor(VSR53PressureSensor(name="pressure_two", device=vsr53_device))
 
-slow_control.add_sensor(BronkhorstPressureSensor(name="pressure_three", device=bronkhorst_device))
-slow_control.add_sensor(BronkhorstPressureSetpointSensor(name="pressure_three_set", device=bronkhorst_device))
+slow_control.add_sensor(
+    BronkhorstPressureSensor(name="pressure_three", device=bronkhorst_device)
+)
+slow_control.add_sensor(
+    BronkhorstPressureSetpointSensor(
+        name="pressure_three_set", device=bronkhorst_device
+    )
+)
 
 database = Database(
     dbname="postgres",
