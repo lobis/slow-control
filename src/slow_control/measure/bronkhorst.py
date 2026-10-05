@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import propar
-
 from slow_control.devices.bronkhorst import BronkhorstDevice
 from slow_control.measure.sensor_types import PressureSensor, PressureSetpointSensor
 
